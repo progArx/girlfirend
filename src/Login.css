@@ -120,20 +120,22 @@ html, body, #root {
 /* tooltip: ให้เป็น absolute ภายใน container ของ input+hint (ต้องมี position: relative) */
 .input-with-hint { position: relative; display: inline-flex; align-items: center; gap: 8px; }
 .hint-tooltip {
-  position: absolute;
+  position: absolute; /* หรือ fixed ถ้าใช้ portal */
   left: 100%;
   top: 50%;
   transform: translate(12px, -50%);
+  z-index: 9999 !important;
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
   background: #fff;
   color: #5b0b2e;
   border: 1px solid rgba(255,109,140,0.12);
   padding: 8px 12px;
   border-radius: 10px;
   box-shadow: 0 10px 24px rgba(0,0,0,0.08);
-  font-weight: 600;
   white-space: nowrap;
-  z-index: 50;
-  display: none; /* แสดงเมื่อจำเป็นด้วย JS หรือ :hover */
 }
 .input-with-hint:hover .hint-tooltip { display: block; }
 
