@@ -1,38 +1,91 @@
-.App {
-  text-align: center;
+/* ปรับ .box ให้ไม่ดันตำแหน่งเมื่อ .page-bg เป็น flex center */
+.box {
+  position: relative;
+  width: 500px;
+  max-width: 92%;
+  height: 400px;
+  /* เอา margin-top/bottom ออก เพราะ .page-bg จัดกึ่งกลางแล้ว */
+  margin: 0 auto;
+  border: 3px dashed #ff6f91;
+  border-radius: 20px;
+  background: #fff0f5;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 18px; /* ป้องกันปุ่มชิดขอบ */
+  box-sizing: border-box;
 }
 
-.App-logo {
-  height: 40vmin;
+/* พื้นที่ปุ่มเป็น relative เพื่อให้ปุ่ม absolute ภายในทำงาน */
+.button-row {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: visible; /* ให้ปุ่มแสดงเต็มที่แม้ชิดขอบ */
+}
+
+/* ปุ่มทั่วไป */
+.btn {
+  font-size: 1.5rem;
+  padding: 20px 40px;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+  z-index: 20;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* ปุ่มชมพู: กึ่งกลางกรอบโดย default (ใช้ transform เพื่อให้ตำแหน่งจริง) */
+.pink-btn {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: linear-gradient(135deg, #ff6f91, #ff3d68);
+  color: #fff;
+  z-index: 30;
+  box-shadow: 0 10px 26px rgba(255,77,120,0.14);
+}
+
+/* ปุ่มเทา (ไม่รัก): ตำแหน่งมาจาก inline style ของ React
+   ห้ามมี transform ที่รบกวน top/left ที่คำนวณจาก JS */
+.gray-btn {
+  position: absolute;
+  background: linear-gradient(135deg, #e0e0e0, #bdbdbd);
+  color: #333;
+  z-index: 25;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+  /* ป้องกันการถูก override โดยสไตล์อื่น */
+  transform: none !important;
+  right: auto !important;
+}
+
+/* หัวข้ออยู่บนสุดเสมอ */
+.box-title {
+  position: absolute;
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #ff3d68;
+  z-index: 40;
   pointer-events: none;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+/* ปรับขนาดปุ่มและกล่องบนหน้าจอเล็ก */
+@media (max-width: 640px) {
+  .box { width: 92%; height: 360px; padding: 14px; }
+  .btn { font-size: 1.05rem; padding: 12px 20px; }
+  .pink-btn { padding: 10px 18px; }
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+/* ถ้าต้องการให้ปุ่ม "ไม่รัก" เริ่มต้นอยู่ตรงกลาง (JS อาจตั้งค่า) ให้ใช้คลาสช่วย */
+.center-start {
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
 }

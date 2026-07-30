@@ -1,0 +1,127 @@
+/* --- บังคับ viewport meta (ถ้ายังไม่มี ให้เพิ่มใน index.html) ---
+<meta name="viewport" content="width=device-width, initial-scale=1"> 
+*/
+
+/* ปรับ safe area สำหรับ iPhone notch / dynamic island */
+:root {
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left: env(safe-area-inset-left, 0px);
+  --safe-right: env(safe-area-inset-right, 0px);
+}
+
+/* บังคับ box-sizing */
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+/* หน้าเพจ กึ่งกลางและเผื่อ safe area */
+.page {
+  min-height: 100svh; /* ใช้ svh เพื่อรองรับ UI bars บนมือถือ */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: calc(16px + var(--safe-top)) calc(16px + var(--safe-right)) calc(16px + var(--safe-bottom)) calc(16px + var(--safe-left));
+  background: linear-gradient(135deg, #fff0f5 0%, #ffe6ea 60%, #fff7f9 100%);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* ซองปรับขนาดตามหน้าจอมือถือ */
+.envelope {
+  /* ขนาดยืดหยุ่น: ไม่เกิน 92vw และไม่เกิน 420px (เหมาะกับ iPhone 16) */
+  width: min(92vw, 420px);
+  /* ความสูงสัมพันธ์กับความกว้าง เพื่อรักษาอัตราส่วน */
+  height: calc(min(92vw, 420px) * 0.625); /* 320x200 => 0.625 */
+  position: relative;
+  cursor: pointer;
+  perspective: 900px;
+  margin: 0;
+}
+
+/* เนื้อจดหมาย กึ่งกลางและปรับขนาดตัวอักษรแบบ responsive */
+.letter {
+  position: absolute;
+  left: 5%;
+  top: 10%;
+  width: calc(100% - 32px);
+  height: calc(100% - 36px); /* เผื่อฝาและ padding */
+  max-height: 85%;
+  transform: translate(-50%, -50%) scale(0.98);
+  transition: transform 0.45s ease, z-index 0s 0.45s;
+  z-index: 5;
+  padding: clamp(12px, 3.5vw, 24px);
+  background: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+  border: 1px solid rgba(244,63,94,0.06);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 8px;
+}
+
+/* ตัวอักษร responsive */
+.letter-title {
+  font-size: clamp(16px, 4.2vw, 20px);
+  font-weight: 700;
+  color: #334155;
+  margin: 0;
+  text-align: center;
+}
+.letter-body {
+  font-size: clamp(12px, 3.6vw, 14px);
+  color: #64748b;
+  text-align: center;
+  margin: 0;
+}
+
+/* ฝาซอง ปรับขนาด border ให้สัมพันธ์กับ envelope width */
+.flap {
+  position: absolute;
+  top: 0;
+  left: 0%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  /* คำนวณขนาดสามเหลี่ยมจาก envelope width */
+  border-left: calc(min(92vw, 420px) / 2) solid transparent;
+  border-right: calc(min(92vw, 420px) / 2) solid transparent;
+  border-top: calc(min(92vw, 420px) * 0.34375) solid #fda4af; /* 110/320 = 0.34375 */
+  filter: drop-shadow(0 4px 6px rgba(0,0,0,0.06));
+  transform-origin: top;
+  transition: transform 0.38s ease, z-index 0s 0.18s;
+  z-index: 30;
+  backface-visibility: hidden;
+}
+
+/* envelope body ปรับมุมและเงาให้เหมาะมือถือ */
+.envelope-body {
+  position: absolute;
+  inset: 0;
+  background-color: #fecdd3;
+  border-radius: 0 0 12px 12px;
+  box-shadow: 0 18px 36px rgba(244,63,94,0.12);
+  z-index: 10;
+  overflow: hidden;
+}
+
+/* สถานะเปิด (ปรับ translate ของ letter ให้สัมพันธ์กับขนาด) */
+.envelope.open .letter {
+  transform: translate(-50%, calc(-150% - 0.5vh)) scale(1);
+  z-index: 20;
+  transition: transform 0.5s cubic-bezier(0.175,0.885,0.32,1.275) 0.28s;
+}
+
+/* ปรับสำหรับ very small screens (เช่น iPhone SE) */
+@media (max-width: 360px) {
+  .envelope { width: 92vw; height: calc(92vw * 0.625); }
+  .letter { padding: 12px; }
+  .flap { border-top-width: calc(92vw * 0.34375); }
+}
+
+/* ปรับสำหรับ landscape มือถือ ให้ไม่ล้นหน้าจอ */
+@media (orientation: landscape) and (max-width: 900px) {
+  .page { padding: 8px; }
+  .envelope { width: min(70vw, 520px); height: calc(min(70vw, 520px) * 0.5); }
+  .flap { border-left: calc(min(70vw,520px)/2); border-right: calc(min(70vw,520px)/2); border-top: calc(min(70vw,520px) * 0.28); }
+}

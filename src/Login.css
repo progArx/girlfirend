@@ -1,0 +1,214 @@
+/* ---------- Root / Safe area ---------- */
+html, body, #root {
+  height: 100%;
+  margin: 0;
+  font-family: "Prompt", system-ui, -apple-system, "Segoe UI", Roboto, Arial;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ---------- Page background and centering ---------- */
+.page-bg {
+  min-height: 100svh; /* ใช้ svh เพื่อรองรับ mobile UI bars */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #fff0f5 0%, #ffe6ea 60%, #fff7f9 100%);
+  padding: env(safe-area-inset-top, 32px) env(safe-area-inset-right, 32px) env(safe-area-inset-bottom, 32px) env(safe-area-inset-left, 32px);
+  box-sizing: border-box;
+}
+
+/* ---------- Center frame (หลัก) ---------- */
+.center-frame {
+  width: 920px;
+  max-width: 98%;
+  background: #ffffff;
+  border-radius: 18px;
+  padding: 36px;
+  box-shadow: 0 22px 50px rgba(0,0,0,0.12);
+  box-sizing: border-box;
+  border: 1px solid rgba(255,109,140,0.08);
+  display: grid;
+  grid-template-columns: 1fr 360px;
+  gap: 28px;
+  align-items: center;
+  z-index: 10;
+  margin: 0 auto;
+}
+
+/* responsive: เปลี่ยนเป็นคอลัมน์เดียวบนหน้าจอเล็ก */
+@media (max-width: 920px) {
+  .center-frame {
+    grid-template-columns: 1fr;
+    padding: 28px;
+    gap: 18px;
+    width: 92%;
+  }
+}
+
+/* ---------- Left column / form area ---------- */
+.left-col { padding-right: 8px; }
+
+.frame-title {
+  margin: 0 0 8px 0;
+  color: #ff3d68;
+  font-size: 1.6rem;
+  font-weight: 800;
+  line-height: 1.05;
+  text-align: left;
+}
+
+.frame-sub {
+  margin: 0 0 18px 0;
+  color: #6b2b3a;
+  font-size: 1rem;
+  opacity: 0.95;
+}
+
+/* ---------- Form controls ---------- */
+.frame-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: flex-start;
+  width: 100%;
+}
+
+/* large input: ใช้ max-width เป็น % ของ parent เพื่อ responsive */
+.large-input {
+  width: clamp(220px, 70%, 520px);
+  min-width: 180px;
+  padding: 14px 16px;
+  border-radius: 14px;
+  border: 1.8px solid #ffd6df;
+  font-size: 1.05rem;
+  outline: none;
+  transition: box-shadow .15s ease, border-color .15s ease;
+  background: #fff;
+  box-sizing: border-box;
+}
+
+.large-input:focus {
+  border-color: #ff6f91;
+  box-shadow: 0 10px 26px rgba(255,111,145,0.12);
+}
+
+/* hint button และ tooltip ปรับตำแหน่งให้สัมพันธ์กับ input container */
+.hint-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  border: 2px solid rgba(255,109,140,0.18);
+  background: #fff;
+  color: #ff3d68;
+  font-weight: 700;
+  font-size: 1.05rem;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 6px 18px rgba(255,77,120,0.06);
+  transition: transform .12s ease, box-shadow .12s ease;
+  position: relative;
+}
+
+.hint-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 26px rgba(255,77,120,0.12);
+}
+
+/* tooltip: ให้เป็น absolute ภายใน container ของ input+hint (ต้องมี position: relative) */
+.input-with-hint { position: relative; display: inline-flex; align-items: center; gap: 8px; }
+.hint-tooltip {
+  position: absolute;
+  left: 100%;
+  top: 50%;
+  transform: translate(12px, -50%);
+  background: #fff;
+  color: #5b0b2e;
+  border: 1px solid rgba(255,109,140,0.12);
+  padding: 8px 12px;
+  border-radius: 10px;
+  box-shadow: 0 10px 24px rgba(0,0,0,0.08);
+  font-weight: 600;
+  white-space: nowrap;
+  z-index: 50;
+  display: none; /* แสดงเมื่อจำเป็นด้วย JS หรือ :hover */
+}
+.input-with-hint:hover .hint-tooltip { display: block; }
+
+/* ---------- Buttons ---------- */
+.btn-wrap { width: 100%; display: flex; justify-content: flex-start; margin-top: 6px; gap: 12px; flex-wrap: wrap; }
+
+.btn {
+  font-size: 1.15rem;
+  padding: 14px 44px;
+  border: none;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: transform .18s ease, box-shadow .18s ease;
+  box-shadow: 0 12px 28px rgba(255,77,120,0.14);
+  background: #fff;
+  color: #333;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn:active { transform: translateY(1px); }
+
+.btn2 {
+  font-size: 1.15rem;
+  padding: 14px 44px;
+  border: none;
+  border-radius: 999px;
+  box-shadow: 0 12px 28px rgba(255,77,120,0.14);
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  margin: 50px auto;
+}
+
+/* Pink variants */
+.pink-btn2, .pink-btn {
+  background: linear-gradient(135deg, #ff6f91, #ff3d68);
+  color: #fff;
+}
+.pink-btn:hover, .pink-btn2:hover {
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 20px 40px rgba(255,77,120,0.22);
+}
+
+/* ---------- Right column (ตกแต่ง) ---------- */
+.right-col {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+
+/* ---------- Error ---------- */
+.error {
+  color: #ff3d68;
+  font-weight: 700;
+  margin-top: 8px;
+}
+
+/* ---------- Responsive tweaks ---------- */
+@media (max-width: 640px) {
+  .large-input { width: 100%; min-width: 0; }
+  .btn { width: 100%; padding: 14px 18px; }
+  .frame-title { font-size: 1.15rem; }
+  .decor-heart { font-size: 48px; }
+  .center-frame { padding: 20px; gap: 12px; }
+  .btn-wrap { justify-content: stretch; }
+}
+
+/* ---------- Utility / debug helpers ---------- */
+/* ใช้ .center-start บนปุ่มเทาเพื่อให้เริ่มตรงกลาง (JS อาจเพิ่มคลาสนี้) */
+.center-start { top: 50% !important; left: 50% !important; transform: translate(-50%, -50%) !important; }
+
+/* บังคับ box-sizing ให้ predictable */
+*,
+*::before,
+*::after { box-sizing: border-box; }
